@@ -40,3 +40,8 @@ target/
 
 # Local database credentials
 src/main/resources/application.properties
+
+# Local environment secrets
+.env
+.env.*
+!.env.example
