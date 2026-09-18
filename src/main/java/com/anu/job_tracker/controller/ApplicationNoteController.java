@@ -3,6 +3,7 @@ package com.anu.job_tracker.controller;
 import com.anu.job_tracker.dto.ApplicationNoteRequest;
 import com.anu.job_tracker.dto.ApplicationNoteResponse;
 import com.anu.job_tracker.service.ApplicationNoteService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ import java.util.List;
         @PostMapping
         public ResponseEntity<ApplicationNoteResponse> addNote(
                 @PathVariable Long applicationId,
-                @RequestBody ApplicationNoteRequest request
+                @Valid @RequestBody ApplicationNoteRequest request
         ) {
             ApplicationNoteResponse response =
                     noteService.addNote(applicationId, request);
