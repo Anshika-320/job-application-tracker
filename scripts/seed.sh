@@ -64,11 +64,11 @@ api() {
 }
 
 json_field() {
-  # json_field <key> — reads the first value of a flat string/number field
+  # json_field <key>. Reads the first value of a flat string or number field.
   sed -n "s/.*\"$1\":\"\{0,1\}\([^,\"}]*\)\"\{0,1\}.*/\1/p"
 }
 
-echo "Job Application Tracker — seeding $API_BASE_URL"
+echo "Seeding $API_BASE_URL"
 
 if ! curl -sS -o /dev/null --max-time 5 "$API_BASE_URL/api/applications"; then
   echo "Could not reach the API at $API_BASE_URL. Is it running?" >&2
@@ -150,6 +150,6 @@ add_note "$id" "Did not clear the system design round"
 add_application "Zoho" "Member Technical Staff" "WITHDRAWN" "Chennai" >/dev/null
 
 total=$(api GET /api/applications | grep -o '"id"' | wc -l | tr -d ' ')
-echo "  done - $total applications in the database"
+echo "  done, $total applications in the database"
 echo
 echo "Sign in at http://localhost:5173 with $SEED_USER_EMAIL"
