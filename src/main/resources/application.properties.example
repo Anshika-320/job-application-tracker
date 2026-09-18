@@ -1,0 +1,19 @@
+# Copy this file to application.properties and replace every placeholder.
+# application.properties is git-ignored so real credentials stay local.
+
+spring.application.name=job-tracker
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/CHANGE_ME_DATABASE
+spring.datasource.username=CHANGE_ME_USERNAME
+spring.datasource.password=CHANGE_ME_PASSWORD
+
+spring.jpa.hibernate.ddl-auto=none
+spring.flyway.enabled=true
+
+# Base64-encoded HMAC key of at least 256 bits.
+jwt.secret=CHANGE_ME_BASE64_ENCODED_SECRET
+jwt.expiration=3600000
+
+# Comma-separated browser origins allowed to call the API.
+# Defaults to http://localhost:5173 when unset.
+FRONTEND_ORIGIN=http://localhost:5173
