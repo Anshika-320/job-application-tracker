@@ -164,6 +164,44 @@ The script signs in through the real API, so it needs the account from step 3. I
 sign in fails it prints the command to start the API correctly. Set `API_BASE_URL` to
 point it somewhere other than `http://localhost:8080`.
 
+## Deploying with Docker and Render
+
+The `Dockerfile` builds the jar in one stage and runs it on a JRE in a second. It
+reads the port from `PORT` (Render sets this) and takes all configuration from
+environment variables, since `application.properties` is not part of the image.
+
+Build and run locally:
+
+```bash
+docker build -t job-tracker .
+docker run --rm -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/job_tracker \
+  -e SPRING_DATASOURCE_USERNAME=postgres \
+  -e SPRING_DATASOURCE_PASSWORD=change-me \
+  -e JWT_SECRET="$(openssl rand -base64 32)" \
+  -e JWT_EXPIRATION=3600000 \
+  job-tracker
+```
+
+On Render:
+
+1. Create a PostgreSQL database.
+2. Create a **Web Service** from this repository. Render detects the `Dockerfile`.
+3. Set these environment variables on the service:
+
+| Variable | Value |
+| --- | --- |
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://<host>:5432/<database>`, built from the database's internal host and name. Render's own connection string starts with `postgresql://`, which JDBC rejects |
+| `SPRING_DATASOURCE_USERNAME` | Database user |
+| `SPRING_DATASOURCE_PASSWORD` | Database password |
+| `JWT_SECRET` | Output of `openssl rand -base64 32` |
+| `JWT_EXPIRATION` | `3600000` |
+| `FRONTEND_ORIGIN` | The deployed client's origin, for example `https://your-client.onrender.com` |
+
+There is no registration endpoint, so to create the first account set
+`SPRING_PROFILES_ACTIVE=dev`, `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` for one
+deploy, then remove them. Flyway applies the migrations on startup.
+
 ## API reference
 
 Every route except `/api/auth/**` needs an `Authorization: Bearer <token>` header.

@@ -1,0 +1,15 @@
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+.DS_Store
+target
+docs
+scripts
+*.md
+
+# Keep local credentials out of the image; configuration comes from environment variables.
+src/main/resources/application.properties
+.env
+.env.*
